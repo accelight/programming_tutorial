@@ -1,0 +1,69 @@
+SQLに関するチュートリアル
+言語: MySQLを想定
+
+1.
+以下のテーブルを作成せよ。
+
+テーブル名 user
+列
+id int -- 主キー(自動採番)
+code varchar(50)
+name varchar(50)
+id_sex tinyint -- 性別
+birthday date -- 誕生日
+is_valid tinyint -- 1:有効 0:無効(論理削除状態
+
+テーブル名 sex
+列
+id int -- 主キー
+name char(5)
+
+2.
+問1で作成したテーブルに、データをINSERTせよ。
+INSERTするデータはuserに7行、sexに2行（男女分）とする。
+また、コードは1から999までの数字を文字列に変換したものを使用する。
+
+3.
+(1) userとsexをJOINしてデータをSELECTせよ。
+(2) 性別順、コード順にソートし、先頭の2行だけSELECTせよ。
+(3) 有効なデータ(論理削除されていないデータ)のみSELECTせよ。
+(4) 年齢をage列としてSELECTせよ。
+
+4.
+(1) userのデータを性別毎に件数、平均年齢を集計せよ。(GROUP BY句を使用)
+(2) 上記集計データで、平均年齢がN以上の性別のデータのみSELECTせよ。(HAVING句を使用, Nは適当な数字を設定)
+
+5.
+userから、適当なデータを1件DELETEせよ。(物理削除)
+
+6.
+以下の制限で、userの性別を男は女に、女を男にUPDATEせよ。
+(1) WHERE句でINを使用。INではID列を直に指定し、UPDATE文は２回実行する。
+(2) WHERE句を使用せず、CASEを使用する。
+
+7.
+userに、id_sexがNULLのデータをINSERTせよ。
+ただし、id_sex列にNULL値をINSERTすることが許可されない場合、テーブル構造を修正し、id_sex列をNULL許可に変更すること。
+
+8.
+(1) userとsexをJOINしてデータをSELECTせよ。INNER JOIN と LEFT OUTER
+JOINでSELECTし、それぞれの結果の違いを確認せよ。
+(2) LEFT OUTER JOIN を用い、性別がNULLのデータのみSELECTせよ。
+
+9.
+userとsexをLEFT OUTER JOIN したレコードセットをビュー(v_user)として定義し、ビューからデータをSELECTせよ。
+
+10.
+データ追加／修正用のストアドプロシージャsetUserを作成し、正しく動作することを確認せよ。
+引数は以下のように定義せよ。
+
+setUser (
+ IN id int,  -- NULL:新規登録 NOT NULL:修正
+ IN code varchar(50),
+ IN name varchar(100),
+ IN birthday date,
+ IN is_valid tinyint,
+ IN id_user, -- データ登録者(オペレータのユーザID)
+ OUT id_out int,  -- 新規登録時のデータのID
+ OUT error_msg varchar(1000)  -- エラー発生時のエラーメッセージ
+)
